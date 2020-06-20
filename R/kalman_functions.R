@@ -84,6 +84,7 @@ makeDailyK <- function(eList, rho = 0.90, niter = 200, seed = 376168){
 
 
 #' @export
+#' @rdname wrtdsK
 #' @examples 
 #' 
 #' eList <- cleanUp(eList)
@@ -115,8 +116,8 @@ cleanUp <- function(eList){
 #' 
 #' df <- data.frame(Julian = c(1,2,2,3,4,4,4,6),
 #'                  y = 1:8)
-#' 
-random_subset <- function(df, col_name, seed = 376168){
+#' random_subset(df, "Julian")
+random_subset <- function(df, col_name){
   
   dup_index <- unique(c(which(duplicated(df[[col_name]], fromLast = FALSE)), 
                         which(duplicated(df[[col_name]], fromLast = TRUE))))
@@ -130,7 +131,6 @@ random_subset <- function(df, col_name, seed = 376168){
   unique_groups <- unique(df[[col_name]][dup_index])
   
   slice_index <- sapply(unique_groups, function(x){
-    if(!is.na(seed)) set.seed(seed)
     sample(which(df[[col_name]] == x), size = 1)
   })
   
@@ -206,6 +206,8 @@ specialCase <- function(eList) {
 
 #' @export
 #' @rdname wrtdsK
+#' @param paStart A numeric value for the starting month of the Period of Analysis, default is 10
+#' @param paLong A numeric value for the length of the Period of Analysis in months, default is 12
 #' @examples 
 #' computeAnnual(eList, DailyK)
 computeAnnual <- function(eList, DailyK, paStart = 10, paLong = 12) {
