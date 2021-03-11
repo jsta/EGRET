@@ -120,7 +120,7 @@ run_WRTDS <- function(estY, estLQ,
   tempWindowY<-windowY
   tempWindowQ<-windowQ
   tempWindowS<-windowS
-  
+
   distLow <- estY-DecLow
   distHigh <- DecHigh-estY
   
@@ -173,16 +173,16 @@ run_WRTDS <- function(estY, estLQ,
   x <- tryCatch({
     survModel <- survival::survreg(survival::Surv(log(ConcLow),log(ConcHigh),type="interval2") ~ 
                                      DecYear+LogQ+SinDY+CosDY,data=Sam,weights=weight,dist="gaus")
+    return(survModel)
   }, warning=function(w) {
     
     if(w$message == "Ran out of iterations and did not converge"){
-      
       Sam2 <- jitterSam(Sam)
-      survModel <- survival::survreg(survival::Surv(log(ConcLow),log(ConcHigh),type="interval2") ~ 
-                                       DecYear+LogQ+SinDY+CosDY,data=Sam2,weights=weight,dist="gaus")
-    } else {
-      survModel <- NA
+    }else{
+      Sam2 <- Sam
     }
+    survModel <- survival::survreg(survival::Surv(log(ConcLow),log(ConcHigh),type="interval2") ~ 
+                                     DecYear+LogQ+SinDY+CosDY,data=Sam2,weights=weight,dist="gaus")
     return(survModel)
   }, error=function(e) {
     message(e, "Error")
